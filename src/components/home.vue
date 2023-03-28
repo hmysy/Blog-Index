@@ -23,12 +23,12 @@
       <div class="inner" style="cursor: pointer" @click="goToBlog">
         <img
           :class="['R_logo', { R_logo_top: flag }]"
-          src="../assets/logo.svg"
+          src="../assets/250player.svg"
         />
         <div :class="['hello', { hello_bottom: flag }]">
           <div>{{ slogan[i] }}</div>
           <div class="hello_bottom_text">
-            点击以访问 {{ $config.BLOG_NAME }}
+            点击关注 {{ $config.BLOG_NAME }}
           </div>
         </div>
       </div>
@@ -69,7 +69,15 @@
         </div>
       </div>
     </transition>
+
+    <!-- 二维码 -->
+      <div class="overlay" :class="{ 'show': isShow }"></div>
+      <div class="popup" :class="{ 'show': isShow }">
+        <i class="close-btn" @click="closePopup">X</i>
+        <img src="../assets/250gongzhonghao.jpg" alt="弹窗中的图片" />
+      </div>
   </div>
+
 </template>
 
 <script>
@@ -90,6 +98,7 @@ export default {
     this.startTime = new Date();
     return {
       flag: false, // 动画是否播放完毕
+      isShow: false, // 控制弹窗显示/隐藏
       slogan: [],
       i: 0,
       centerShow: false, // 导航抽屉显示状态
@@ -106,8 +115,12 @@ export default {
     }
   },
   methods: {
+    closePopup() {
+      this.isShow = false;
+    },
     goToBlog() {
-      window.location.href = this.$config.BLOG_URL;
+      this.isShow = true;
+      //window.location.href = this.$config.BLOG_URL;
     },
     _jieliu(callback, delay) {
       let currentTime = new Date();
@@ -161,6 +174,7 @@ export default {
     setTimeout(() => {
       this.flag = true;
     }, 1300);
+    this.isShow = false; // 添加这一行
     // 图片懒加载
     this.imgUrl = this.$config.BACKGROUND_IMG_URL;
     var img = new Image();
@@ -310,6 +324,44 @@ export default {
   }
   .record_number_show {
     transform: translateY(0px);
+  }
+
+  .overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+  }
+
+  .popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    z-index: 9999;
+  }
+
+  .popup img {
+    max-width: 100%;
+    max-height: 100%;
+  }
+  .close-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+    color: gray;
+    font-size: 20px;
+  }
+
+  .show {
+    display: block !important; /* 使用 !important 来覆盖默认的 display: none */
   }
 }
 
